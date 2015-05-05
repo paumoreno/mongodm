@@ -199,7 +199,7 @@ class MongoDB
         if(!$this->_db instanceof \MongoDB) {
             throw new \Exception('Unable to connect to database :: $_db is ' . gettype($this->_db));
         }
-        
+
         $this->_connected = true;
 
         return true;
@@ -229,9 +229,9 @@ class MongoDB
             try{
                 $this->_connection->close();
             }catch(\Exception $e){
-                
+
             }
-            
+
         }
 
         $this->_db = $this->_connection = null;
@@ -460,6 +460,36 @@ class MongoDB
                 'collection_name' => $collection_name,
                 'query'           => $query,
                 'fields'          => $fields
+            )
+        );
+    }
+
+    /**
+     * find and modify
+     *
+     * @param string $collection_name collection name
+     * @param array  $query           query
+     * @param array  $sort            sort
+     * @param array  $remove          remove
+     * @param array  $update          update
+     * @param array  $new             new
+     * @param array  $fields          fields
+     * @param array  $upsert          upsert
+     *
+     * @return mixed
+     */
+    public function findAndModify ($collection_name, array $query = array(), array $sort = array(), $remove = false, array $update = array(), $new = false, array $fields = array(), $upsert = false)
+    {
+        return $this->_call(
+            'find', array(
+                'collection_name' => $collection_name,
+                'query'           => $query,
+                'sort'            => $sort,
+                'remove'          => $remove,
+                'update'          => $update,
+                'new'             => $new,
+                'fields'          => $fields
+                'upsert'          => $upsert
             )
         );
     }
@@ -736,6 +766,9 @@ class MongoDB
                 break;
             case 'find':
                 $r = $c->find($query, $fields);
+                break;
+            case 'find_and_modify':
+                $r = $c->findAndModify($query, $sort, $remove, $update, $new, $fields, $upsert);
                 break;
             case 'group':
                 $r = $c->group($keys, $initial, $reduce, $condition);
