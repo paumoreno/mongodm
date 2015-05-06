@@ -468,28 +468,22 @@ class MongoDB
      * find and modify
      *
      * @param string $collection_name collection name
-     * @param array  $query           query
-     * @param array  $sort            sort
-     * @param array  $remove          remove
+     * @param array  $where           where
      * @param array  $update          update
-     * @param array  $new             new
      * @param array  $fields          fields
-     * @param array  $upsert          upsert
+     * @param array  $options         options
      *
      * @return mixed
      */
-    public function findAndModify ($collection_name, array $query = array(), array $sort = array(), $remove = false, array $update = array(), $new = false, array $fields = array(), $upsert = false)
+    public function findAndModify ($collection_name, array $where = array(), array $update = array(), array $fields = array(), array $options = array())
     {
         return $this->_call(
-            'find', array(
+            'find_and_modify', array(
                 'collection_name' => $collection_name,
-                'query'           => $query,
-                'sort'            => $sort,
-                'remove'          => $remove,
+                'where'           => $where,
                 'update'          => $update,
-                'new'             => $new,
                 'fields'          => $fields,
-                'upsert'          => $upsert
+                'options'         => $options
             )
         );
     }
@@ -768,7 +762,7 @@ class MongoDB
                 $r = $c->find($query, $fields);
                 break;
             case 'find_and_modify':
-                $r = $c->findAndModify($query, $sort, $remove, $update, $new, $fields, $upsert);
+                $r = $c->findAndModify($where, $update, $fields, $options);
                 break;
             case 'group':
                 $r = $c->group($keys, $initial, $reduce, $condition);
