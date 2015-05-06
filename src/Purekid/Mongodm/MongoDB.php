@@ -488,7 +488,7 @@ class MongoDB
                 'remove'          => $remove,
                 'update'          => $update,
                 'new'             => $new,
-                'fields'          => $fields
+                'fields'          => $fields,
                 'upsert'          => $upsert
             )
         );
